@@ -9,6 +9,7 @@ import HomePage from "./components/HomePage";
 import ReportDisaster from "./components/ReportDisaster";
 import TeamDashboard from "./components/TeamDashboard";
 import AboutUs from "./components/Aboutus";
+import TeamMemberPage from './components/TeamMemberPage'; // ✅ Team Member Page import
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
           <Link to="/team" className="text-lg text-blue-600 font-bold hover:text-blue-800 transition">Team</Link>
           <Link to="/home" className="text-lg text-blue-600 font-bold hover:text-blue-800 transition">Home</Link>
           <Link to="/AboutUs" className="text-lg text-blue-600 font-bold hover:text-blue-800 transition">About Us</Link>
+          <Link to="/team-member" className="text-lg text-blue-600 font-bold hover:text-blue-800 transition">Team Member</Link> {/* ✅ New Nav Link */}
         </nav>
 
         {/* Routes */}
@@ -33,6 +35,7 @@ const App = () => {
             <Route path="/team" element={<TeamDashboard />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/AboutUs" element={<AboutUs />} />
+            <Route path="/team-member" element={<TeamMemberPage />} /> {/* ✅ Team Member Route */}
           </Routes>
         </div>
 
