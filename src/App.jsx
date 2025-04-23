@@ -7,10 +7,9 @@ import Registration from "./components/Register";
 import LoginPage from "./components/LoginPage";
 import HomePage from "./components/HomePage";
 import ReportDisaster from "./components/ReportDisaster";
-import TeamDashboard from "./components/TeamDashboard";
+import TeamDashboard from "./components/OperationsDashboard";
 import AboutUs from "./components/Aboutus";
-import TeamMemberPage from './components/TeamMemberPage'; // ✅ Team Member Page import
-
+import VolunteerDashboard from './components/VolunteerDashboard'; 
 const App = () => {
   return (
     <Router>
@@ -19,23 +18,23 @@ const App = () => {
         <nav className="bg-white shadow-md py-4 px-8 rounded-b-3xl flex justify-center gap-6">
           <Link to="/" className="text-lg text-blue-600 font-bold hover:text-blue-800 transition">Login</Link>
           <Link to="/Registration" className="text-lg text-blue-600 font-bold hover:text-blue-800 transition">Registration</Link>
-          <Link to="/report" className="text-lg text-blue-600 font-bold hover:text-blue-800 transition">Report</Link>
-          <Link to="/team" className="text-lg text-blue-600 font-bold hover:text-blue-800 transition">Team</Link>
           <Link to="/home" className="text-lg text-blue-600 font-bold hover:text-blue-800 transition">Home</Link>
+          <Link to="/report" className="text-lg text-blue-600 font-bold hover:text-blue-800 transition">Report</Link>
+          <Link to="/Operation" className="text-lg text-blue-600 font-bold hover:text-blue-800 transition">Operations</Link>
+          <Link to="/VolunteerDashboard" className="text-lg text-blue-600 font-bold hover:text-blue-800 transition">VolunteerDashboard</Link> 
           <Link to="/AboutUs" className="text-lg text-blue-600 font-bold hover:text-blue-800 transition">About Us</Link>
-          <Link to="/team-member" className="text-lg text-blue-600 font-bold hover:text-blue-800 transition">Team Member</Link> {/* ✅ New Nav Link */}
         </nav>
 
         {/* Routes */}
         <div className="p-6">
           <Routes>
             <Route path="/" element={<LoginPage />} />
+            <Route path="/home" element={<HomePage />} />
             <Route path="/Registration" element={<Registration />} />
             <Route path="/report" element={<ReportDisaster />} />
-            <Route path="/team" element={<TeamDashboard />} />
-            <Route path="/home" element={<HomePage />} />
+            <Route path="/Operation" element={<TeamDashboard />} />
+            <Route path="/VolunteerDashboard" element={<VolunteerDashboard />} /> 
             <Route path="/AboutUs" element={<AboutUs />} />
-            <Route path="/team-member" element={<TeamMemberPage />} /> {/* ✅ Team Member Route */}
           </Routes>
         </div>
 

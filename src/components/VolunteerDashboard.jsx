@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TeamMemberPage = () => {
+const VolunteerDashboard = () => {
   return (
     <div className="p-6 min-h-screen bg-gray-100">
       <h2 className="text-3xl font-bold text-center text-blue-700 mb-6">
@@ -48,4 +48,4 @@ const TeamMemberPage = () => {
   );
 };
 
-export default TeamMemberPage;
+export default VolunteerDashboard;

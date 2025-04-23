@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function TeamDashboard() {
+function OperationsDashboard() {
   const [disasterReports, setDisasterReports] = useState([]);
   const [availableTeams, setAvailableTeams] = useState([
     { id: 1, name: 'Team A', location: 'Mumbai', department: 'Rescue', status: 'Available' },
@@ -76,7 +76,7 @@ function TeamDashboard() {
     <div style={styles.container}>
       {/* Left: Disaster Reports */}
       <div style={styles.reportsContainer}>
-        <h2 style={styles.heading}>Team Dashboard</h2>
+        <h2 style={styles.heading}>Operation Dashboard</h2>
         <div style={styles.filtersTop}>
           <select value={filterLocation} onChange={(e) => setFilterLocation(e.target.value)} style={styles.select}>
             <option value="">All Locations</option>
@@ -163,4 +163,4 @@ const styles = {
   teamName: { fontSize: '1.1rem', marginBottom: '0.5rem' },
 };
 
-export default TeamDashboard;
+export default OperationsDashboard;
