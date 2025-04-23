@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 
 function ReportDisaster() {
@@ -23,12 +22,12 @@ function ReportDisaster() {
               limit: 5,
             },
             headers: {
-              'Accept': 'application/json',
+              Accept: 'application/json',
               'User-Agent': 'DisasterApp/1.0 (your-email@example.com)',
             },
           })
           .then((res) => {
-            setLocationSuggestions(res.data.map(loc => loc.display_name));
+            setLocationSuggestions(res.data.map((loc) => loc.display_name));
           })
           .catch((err) => {
             console.error('Location fetch failed:', err);
@@ -44,39 +43,51 @@ function ReportDisaster() {
     e.preventDefault();
     if (!name || !location || !description || !disasterType) {
       toast.error('All fields are required!', {
-        position: toast.POSITION.TOP_CENTER,
+        position: 'top-center',
         autoClose: 3000,
       });
       return;
     }
 
-    const newReport = {
-      id: Date.now(),
-      name,
-      location,
-      type: disasterType,
-      description,
-      time: new Date().toISOString(),
-      status: 'Pending',
-    };
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
 
-    const existingReports = JSON.parse(localStorage.getItem('disasterReports')) || [];
-    const updatedReports = [...existingReports, newReport];
-    localStorage.setItem('disasterReports', JSON.stringify(updatedReports));
+        const newReport = {
+          id: Date.now(),
+          name,
+          location,
+          type: disasterType,
+          description,
+          time: new Date().toISOString(),
+          status: 'Pending',
+          latitude,
+          longitude,
+        };
 
-    setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      toast.success('Disaster report submitted successfully!', {
-        position: toast.POSITION.TOP_CENTER,
-        autoClose: 3000,
-      });
-      setName('');
-      setLocation('');
-      setDescription('');
-      setDisasterType('');
-      setLocationSuggestions([]);
-    }, 2000);
+        const existingReports =
+          JSON.parse(localStorage.getItem('disasterReports')) || [];
+        const updatedReports = [...existingReports, newReport];
+        localStorage.setItem('disasterReports', JSON.stringify(updatedReports));
+
+        setIsSubmitting(true);
+        setTimeout(() => {
+          setIsSubmitting(false);
+          toast.success('Disaster report submitted successfully!', {
+            position: 'top-center',
+            autoClose: 3000,
+          });
+          setName('');
+          setLocation('');
+          setDescription('');
+          setDisasterType('');
+          setLocationSuggestions([]);
+        }, 2000);
+      },
+      (error) => {
+        toast.error('Failed to get location. Please enable GPS.');
+      }
+    );
   };
 
   return (

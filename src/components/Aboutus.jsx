@@ -24,9 +24,7 @@ const AboutUs = () => {
         </p>
         <ul className="mt-4">
           <li>Shivam Verma - Project Lead</li>
-          <li>Jane Doe - AI Specialist</li>
-          <li>John Smith - Backend Developer</li>
-          <li>Emily Davis - UI/UX Designer</li>
+         
         </ul>
       </section>
 
@@ -36,8 +34,8 @@ const AboutUs = () => {
           If you have any questions or would like to learn more about our
           project, feel free to get in touch with us.
         </p>
-        <p>Email: info@disasterresponse.com</p>
-        <p>Phone: +123-456-7890</p>
+        <p>Email: Vermamavish12035@gmail.com</p>
+        <p>Phone: +91 9219056049</p>
       </section>
     </div>
   );
