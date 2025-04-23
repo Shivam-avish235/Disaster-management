@@ -17,7 +17,7 @@ const App = () => {
         {/* Navigation Bar */}
         <nav className="bg-white shadow-md py-4 px-8 rounded-b-3xl flex justify-center gap-6">
           <Link to="/" className="text-lg text-blue-600 font-bold hover:text-blue-800 transition">Login</Link>
-          <Link to="/Registration" className="text-lg text-blue-600 font-bold hover:text-blue-800 transition">Registration</Link>
+          {/* <Link to="/Registration" className="text-lg text-blue-600 font-bold hover:text-blue-800 transition">Registration</Link> */}
           <Link to="/home" className="text-lg text-blue-600 font-bold hover:text-blue-800 transition">Home</Link>
           <Link to="/report" className="text-lg text-blue-600 font-bold hover:text-blue-800 transition">Report</Link>
           <Link to="/Operation" className="text-lg text-blue-600 font-bold hover:text-blue-800 transition">Operations</Link>

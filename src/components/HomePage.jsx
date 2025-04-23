@@ -17,7 +17,7 @@ const HomePage = () => {
             <span className="text-xl font-semibold">SignIN</span>
           </Link>
           <Link
-            to="/Loginpage"
+            to="/AboutUs"
             className="flex items-center space-x-4 hover:text-green-600 hover:scale-105 transition-all duration-200 transform"
           >
             <FaUsers className="text-2xl text-green-600" />
@@ -31,11 +31,11 @@ const HomePage = () => {
             <span className="text-xl font-semibold">Report Disaster</span>
           </Link>
           <Link
-            to="/team"
+            to="/Operation"
             className="flex items-center space-x-4 hover:text-yellow-600 hover:scale-105 transition-all duration-200 transform"
           >
             <FaTasks className="text-2xl text-yellow-600" />
-            <span className="text-xl font-semibold">Team Dashboard</span>
+            <span className="text-xl font-semibold">Operation Dashboard</span>
           </Link>
         </nav>
       </aside>

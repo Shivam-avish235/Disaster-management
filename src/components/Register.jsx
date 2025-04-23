@@ -1,93 +1,80 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const AdminRegister = () => {
+const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    // Simple validation check for matching passwords
+
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       return;
     }
 
-    // Add registration logic here
-    console.log('Admin registered');
-    
-    // Clear form and error after successful registration (optional)
+    console.log('User registered:', username);
     setUsername('');
     setPassword('');
     setConfirmPassword('');
     setError('');
+
+    // Redirect to login
+    navigate('/');
   };
 
   return (
-    <div style={styles.container}>
-      <h2>Admin Register</h2>
-      {error && <p style={styles.error}>{error}</p>}
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <label>Username:</label>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          style={styles.input}
-        />
-        <label>Password:</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          style={styles.input}
-        />
-        <label>Confirm Password:</label>
-        <input
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          style={styles.input}
-        />
-        <button type="submit" style={styles.button}>Register</button>
-      </form>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white p-8 rounded-xl shadow-xl w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-6 text-center">Create an Account</h2>
+
+        {error && <p className="text-red-500 text-sm mb-4 text-center">{error}</p>}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg"
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg"
+            required
+          />
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg"
+            required
+          />
+          <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700">
+            Sign Up
+          </button>
+        </form>
+
+        <p className="mt-4 text-center text-sm text-gray-600">
+          Already have an account?{' '}
+          <button
+            onClick={() => navigate('/')}
+            className="text-blue-600 hover:underline"
+          >
+            Login
+          </button>
+        </p>
+      </div>
     </div>
   );
 };
 
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    marginTop: '50px',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '300px',
-  },
-  input: {
-    padding: '10px',
-    margin: '10px 0',
-    border: '1px solid #ccc',
-    borderRadius: '4px',
-  },
-  button: {
-    padding: '10px',
-    backgroundColor: '#007bff',
-    color: 'white',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-  },
-  error: {
-    color: 'red',
-    fontSize: '14px',
-    marginBottom: '10px',
-  },
-};
-
-export default AdminRegister;
+export default Register;

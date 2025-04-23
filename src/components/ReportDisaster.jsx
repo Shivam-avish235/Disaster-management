@@ -1,130 +1,134 @@
-import React, { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-function ReportDisaster() {
-  const [name, setName] = useState('');
-  const [location, setLocation] = useState('');
-  const [description, setDescription] = useState('');
-  const [disasterType, setDisasterType] = useState('');
+const disasterTypeSuggestions = {
+  hilly: "Landslide",
+  river: "Flood",
+  city: "Fire",
+  mountain: "Earthquake",
+  hospital: "Medical Emergency",
+};
+
+const ReportDisaster = () => {
+  const [name, setName] = useState("");
+  const [location, setLocation] = useState("");
+  const [description, setDescription] = useState("");
+  const [disasterType, setDisasterType] = useState("");
   const [locationSuggestions, setLocationSuggestions] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (location.length > 3) {
+    if (location.length > 2) {
       const timeout = setTimeout(() => {
         axios
-          .get('https://nominatim.openstreetmap.org/search', {
+          .get("https://nominatim.openstreetmap.org/search", {
             params: {
               q: location,
-              format: 'json',
+              format: "json",
               addressdetails: 1,
               limit: 5,
             },
             headers: {
-              Accept: 'application/json',
-              'User-Agent': 'DisasterApp/1.0 (your-email@example.com)',
+              Accept: "application/json",
+              "User-Agent": "DisasterApp/1.0",
             },
           })
           .then((res) => {
-            setLocationSuggestions(res.data.map((loc) => loc.display_name));
+            setLocationSuggestions(res.data);
           })
-          .catch((err) => {
-            console.error('Location fetch failed:', err);
+          .catch(() => {
+            toast.error("Failed to fetch location suggestions.");
           });
       }, 500);
       return () => clearTimeout(timeout);
-    } else {
-      setLocationSuggestions([]);
     }
   }, [location]);
+
+  const handleSuggestionClick = (loc) => {
+    setLocation(loc.display_name);
+    // AI Placeholder: You could use AI to suggest based on loc.address
+    if (loc.display_name.toLowerCase().includes("hill")) {
+      setDisasterType(disasterTypeSuggestions.hilly);
+    } else if (loc.display_name.toLowerCase().includes("river")) {
+      setDisasterType(disasterTypeSuggestions.river);
+    } else if (loc.display_name.toLowerCase().includes("hospital")) {
+      setDisasterType(disasterTypeSuggestions.hospital);
+    } else {
+      setDisasterType("");
+    }
+    setLocationSuggestions([]);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!name || !location || !description || !disasterType) {
-      toast.error('All fields are required!', {
-        position: 'top-center',
-        autoClose: 3000,
-      });
+      toast.error("All fields are required!");
       return;
     }
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
+    const newReport = {
+      id: Date.now(),
+      name,
+      location,
+      type: disasterType,
+      description,
+      time: new Date().toISOString(),
+      status: "Pending",
+    };
 
-        const newReport = {
-          id: Date.now(),
-          name,
-          location,
-          type: disasterType,
-          description,
-          time: new Date().toISOString(),
-          status: 'Pending',
-          latitude,
-          longitude,
-        };
+    const existing = JSON.parse(localStorage.getItem("disasterReports")) || [];
+    const updated = [...existing, newReport];
+    localStorage.setItem("disasterReports", JSON.stringify(updated));
 
-        const existingReports =
-          JSON.parse(localStorage.getItem('disasterReports')) || [];
-        const updatedReports = [...existingReports, newReport];
-        localStorage.setItem('disasterReports', JSON.stringify(updatedReports));
-
-        setIsSubmitting(true);
-        setTimeout(() => {
-          setIsSubmitting(false);
-          toast.success('Disaster report submitted successfully!', {
-            position: 'top-center',
-            autoClose: 3000,
-          });
-          setName('');
-          setLocation('');
-          setDescription('');
-          setDisasterType('');
-          setLocationSuggestions([]);
-        }, 2000);
-      },
-      (error) => {
-        toast.error('Failed to get location. Please enable GPS.');
-      }
-    );
+    setIsSubmitting(true);
+    setTimeout(() => {
+      setIsSubmitting(false);
+      toast.success("Report submitted!");
+      setName("");
+      setLocation("");
+      setDescription("");
+      setDisasterType("");
+    }, 1000);
   };
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.heading}>Report a Disaster</h2>
-      <form style={styles.form} onSubmit={handleSubmit}>
+    <div className="max-w-xl mx-auto p-6 bg-white shadow-xl rounded-2xl mt-10">
+      <h2 className="text-2xl font-bold text-center text-blue-700 mb-6">🚨 Report a Disaster</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"
           placeholder="Your Name"
-          style={styles.input}
           value={name}
           onChange={(e) => setName(e.target.value)}
+          className="w-full p-3 border border-gray-300 rounded-md"
         />
-        <input
-          type="text"
-          placeholder="Location"
-          style={styles.input}
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-        />
-        {locationSuggestions.length > 0 && (
-          <ul style={styles.suggestionList}>
-            {locationSuggestions.map((suggestion, index) => (
-              <li
-                key={index}
-                style={styles.suggestionItem}
-                onClick={() => setLocation(suggestion)}
-              >
-                {suggestion}
-              </li>
-            ))}
-          </ul>
-        )}
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Location"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-md"
+          />
+          {locationSuggestions.length > 0 && (
+            <ul className="absolute z-10 bg-white shadow-md border mt-1 rounded-md max-h-40 overflow-y-auto w-full">
+              {locationSuggestions.map((loc, i) => (
+                <li
+                  key={i}
+                  className="p-2 hover:bg-blue-100 cursor-pointer"
+                  onClick={() => handleSuggestionClick(loc)}
+                >
+                  {loc.display_name}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
         <select
           value={disasterType}
           onChange={(e) => setDisasterType(e.target.value)}
-          style={styles.select}
+          className="w-full p-3 border border-gray-300 rounded-md"
         >
           <option value="">Select Disaster Type</option>
           <option value="Accident">Accident</option>
@@ -136,57 +140,24 @@ function ReportDisaster() {
           <option value="Other">Other</option>
         </select>
         <textarea
-          placeholder="Describe the disaster"
-          style={styles.textarea}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-        ></textarea>
+          placeholder="Describe the disaster"
+          className="w-full p-3 border border-gray-300 rounded-md"
+          rows={4}
+        />
         <button
           type="submit"
-          style={{
-            ...styles.button,
-            opacity: isSubmitting ? 0.6 : 1,
-            cursor: isSubmitting ? 'not-allowed' : 'pointer',
-          }}
+          className={`w-full p-3 rounded-md text-white font-semibold ${
+            isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+          }`}
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Submitting...' : 'Submit Report'}
+          {isSubmitting ? "Submitting..." : "Submit Report"}
         </button>
       </form>
     </div>
   );
-}
-
-const styles = {
-  container: { padding: '2rem', maxWidth: '600px', margin: 'auto' },
-  heading: { fontSize: '2rem', marginBottom: '1rem', textAlign: 'center' },
-  form: { display: 'flex', flexDirection: 'column', gap: '1rem' },
-  input: { padding: '0.75rem', fontSize: '1rem' },
-  textarea: { padding: '0.75rem', fontSize: '1rem', minHeight: '100px' },
-  select: { padding: '0.75rem', fontSize: '1rem' },
-  button: {
-    padding: '0.75rem',
-    fontSize: '1rem',
-    backgroundColor: '#3498db',
-    color: '#fff',
-    border: 'none',
-    transition: 'opacity 0.3s ease',
-  },
-  suggestionList: {
-    listStyleType: 'none',
-    padding: '0',
-    margin: '0',
-    backgroundColor: '#f0f0f0',
-    border: '1px solid #ccc',
-    borderRadius: '4px',
-    maxHeight: '150px',
-    overflowY: 'auto',
-  },
-  suggestionItem: {
-    padding: '0.5rem',
-    cursor: 'pointer',
-    borderBottom: '1px solid #ddd',
-  },
 };
 
 export default ReportDisaster;
